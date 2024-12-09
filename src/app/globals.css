@@ -19,3 +19,35 @@ body {
   display: none; /* for the initial loginpage */
 }
 
+.cl-internal-4x6jej {
+  display: none; /* for hiding signup*/
+} 
+
+.cl-logoImage {
+  border-radius: 50%;
+}
+
+.cl-logoImage:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+.cl-logoImage:active {
+  transform: scale(0.9);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgb(238, 255, 0);
+}
+
+
+.cl-socialButtons {
+  display: none; /* hiding social buttons*/
+}
+
+.cl-dividerRow {
+  display: none; /* hiding ----or----- divider*/
+}
+
+.cl-card {
+  gap: 0px;
+}

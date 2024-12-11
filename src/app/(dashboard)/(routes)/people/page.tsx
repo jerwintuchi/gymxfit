@@ -1,7 +1,7 @@
 const PeoplePage = () => {
     return (
-        <div>
-            People page
+        <div className="text-black">
+            People pagesf safs dfad af asdfasd ad sadf sad asda da fsdaf sad
         </div>
     );
 }

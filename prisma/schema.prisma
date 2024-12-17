@@ -15,56 +15,47 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  clerkId        String          @unique // Maps to Clerk's user ID
-  name           String
-  role           Role            @default(USER)
-  membershipId   String?         @unique
-  attendanceLogs AttendanceLog[]
-  membershipExpiry DateTime?   // for membership expiration
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  id               String            @id @default(cuid())
+  email            String            @unique
+  password         String?
+  role             UserRole          @default(MEMBER)
+  isMember         Boolean           @default(false) // Indicates if the user is a member
+  membershipExpiry DateTime?         // Expiration date if the user is a member
+  name             String
+  phone            String?
+  attendanceLogs   AttendanceLog[]   // Relation to AttendanceLog
+  createdAt        DateTime          @default(now())
 }
 
 model Admin {
-  id        String   @id @default(cuid())
-  clerkId   String   @unique // Maps to Clerk's user ID
-  role      Role     @default(ADMIN)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String      @id @default(cuid())
+  clerkId   String      @unique // Maps to Clerk's user ID
+  role      UserRole    @default(ADMIN)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
 model AttendanceLog {
   id        String   @id @default(cuid())
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
-  nonMember NonMember? @relation(fields: [nonMemberid], references: [id])
-  nonMemberid String? //foreign key
+  userId    String
+  user      User     @relation(fields: [userId], references: [id]) // Fixing the relation
   checkIn   DateTime
   checkOut  DateTime?
   createdAt DateTime @default(now())
-}
-
-model NonMember {
-  id            String         @id @default(cuid())
-  name          String
-  temporaryId   String         @unique
-  attendanceLogs AttendanceLog[]
-  createdAt     DateTime @default(now())
 }
 
 model Notification {
   id        String   @id @default(cuid())
   message   String
   type      NotificationType
-  sentTo    String? // Could be linked to Admin or User ID
+  sentTo    String?  // Could be linked to Admin or User ID
   sentAt    DateTime @default(now())
 }
 
-enum Role {
+enum UserRole {
   ADMIN
-  USER
   MANAGER
+  MEMBER
 }
 
 enum NotificationType {

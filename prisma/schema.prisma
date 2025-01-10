@@ -15,25 +15,20 @@ datasource db {
 }
 
 model User {
-  id               String            @id @default(cuid())
-  email            String            @unique
-  password         String?
-  role             UserRole          @default(MEMBER)
-  isMember         Boolean           @default(false) // Indicates if the user is a member
-  membershipExpiry DateTime?         // Expiration date if the user is a member
-  name             String
-  phone            String?
-  attendanceLogs   AttendanceLog[]   // Relation to AttendanceLog
-  createdAt        DateTime          @default(now())
+  id               String          @id @default(cuid())
+  clerkId          String          @unique
+  clerkAttributes  Json?
+  role             UserRole        @default(MEMBER)
+  isMember         Boolean         @default(false)
+  membershipExpiry DateTime?
+  attendanceLogs   AttendanceLog[]
+  notifications    Notification[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
-model Admin {
-  id        String      @id @default(cuid())
-  clerkId   String      @unique // Maps to Clerk's user ID
-  role      UserRole    @default(ADMIN)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-}
+
+
 
 model AttendanceLog {
   id        String   @id @default(cuid())
@@ -50,6 +45,8 @@ model Notification {
   type      NotificationType
   sentTo    String?  // Could be linked to Admin or User ID
   sentAt    DateTime @default(now())
+
+  User User[]
 }
 
 enum UserRole {

@@ -1,35 +1,53 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-// This will initialize Clerk middleware
-export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    await auth.protect()
-  }
-})
+export default clerkMiddleware(async (auth, req) => {
+        const authObject = await auth();
+        const { sessionClaims } = authObject || {};
+        const userRole = sessionClaims?.role?.role;
 
-const isPublicRoute = createRouteMatcher(['/sign-in(.*)'])
+        if(userRole) {
+          console.log("Request URL:", req.nextUrl.pathname); // Log the pathname
+          console.log("Auth Object:", authObject); // Log the entire auth object
+          console.log("Session Claims:", sessionClaims); // Log session claims
+          console.log("Role from sessionClaims:", userRole, "Type:", typeof userRole);
+        }
+        
+        if (isPublicRoute(req)) {
+            console.log("Public route accessed:", req.nextUrl.pathname);
+            return NextResponse.next();
+        }
 
-const isProtectedRoute = createRouteMatcher([
-  "/admin(.*)", // For admin pages
+        if (!authObject || !authObject.sessionId) {
+            console.log("User not authenticated. Redirecting to sign-in.");
+            return NextResponse.redirect(new URL("/sign-in", req.url));
+        }
+
+        if (isProtectedRoute(req)) {
+            auth.protect(); // Ensure user is signed in
+
+            if (userRole !== "ADMIN") {
+                console.log("User is unauthorized, role is", userRole, "Redirecting to /unauthorized");
+                return NextResponse.redirect(new URL("/unauthorized", req.url));
+            }
+
+            console.log("User is authorized, role is", userRole);
+        }
+    
+});
+
+const isPublicRoute = createRouteMatcher([
+    "/sign-in(.*)",
+    "/unauthorized",
 ]);
 
-// Config for route matching and public routes
+const isProtectedRoute = createRouteMatcher([
+    "/(.*)", // Matches all routes
+]);
+
 export const config = {
-  // This matcher ensures Clerk middleware is applied to certain routes, while excluding static and internal files
-  matcher: [
-    // Exclude Next.js internals and static files
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always apply Clerk middleware to API routes
-    '/(api|trpc)(.*)',
-    // Apply Clerk middleware to protected routes (like /admin)
-    '/admin(.*)', // Or use a wildcard for your protected routes
-  ],
-  // Define public routes that should not require authentication
-  publicRoutes: [
-    "/sign-in(.*)",  // Sign-in pages
-    "/landing(.*)",  // Landing pages
-    "/about",        // Public about page
-    "/unauthorized", // Unauthorized page
-  ]
+    matcher: [
+        '/((?!_next|static|favicon.ico|api|trpc|sign-in|unauthorized).*)', // Exclude _next, static, API routes, sign-in, and unauthorized
+    ],
+    publicRoutes: ["/sign-in(.*)", "/unauthorized"],
 };

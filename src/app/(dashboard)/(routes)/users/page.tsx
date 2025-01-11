@@ -1,4 +1,4 @@
-const PeoplePage = () => {
+const UsersPage = () => {
     return (
         <div className="text-black">
             People pagesf safs dfad af asdfasd ad sadf sad asda da fsdaf sad
@@ -6,4 +6,4 @@ const PeoplePage = () => {
     );
 }
 
-export default PeoplePage;
+export default UsersPage;

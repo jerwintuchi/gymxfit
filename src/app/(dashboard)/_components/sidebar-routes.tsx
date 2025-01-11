@@ -11,8 +11,8 @@ const guestRoutes = [
     },
     {
         icon: Users,
-        label: "People",
-        href: "/people"
+        label: "Users",
+        href: "/users"
     }
 ]
 export const SidebarRoutes = () => {

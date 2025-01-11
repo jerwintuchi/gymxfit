@@ -6,12 +6,12 @@ export default clerkMiddleware(async (auth, req) => {
         const { sessionClaims } = authObject || {};
         const userRole = sessionClaims?.role?.role;
 
-        if(userRole) {
+        /* if(userRole) {
           console.log("Request URL:", req.nextUrl.pathname); // Log the pathname
           console.log("Auth Object:", authObject); // Log the entire auth object
           console.log("Session Claims:", sessionClaims); // Log session claims
           console.log("Role from sessionClaims:", userRole, "Type:", typeof userRole);
-        }
+        } */
         
         if (isPublicRoute(req)) {
             console.log("Public route accessed:", req.nextUrl.pathname);

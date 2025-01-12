@@ -18,7 +18,7 @@ export default function RouteLinks() {
                 <h2 className="text-xl font-semibold mb-2">Attendance Logs</h2>
                 <p className="text-gray-400">View and filter user attendance logs.</p>
                 <a
-                    href="/attendance"
+                    href="/attendances"
                     className="inline-block mt-4 px-4 py-2 bg-teal-600 rounded hover:bg-teal-700"
                 >
                     Go to Attendance

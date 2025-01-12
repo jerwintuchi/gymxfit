@@ -4,7 +4,7 @@ export default function Attendances() {
     return (
         <div className='min-h-screen w-full bg-black'>
             <div className='text-white'>
-                Attendance & Sessions
+                Attendance & Seesion
             </div>
         </div>
     )

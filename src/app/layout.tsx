@@ -2,7 +2,7 @@
 import { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Gymxfit Admin",
@@ -24,6 +24,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
+          <Toaster position="top-center" reverseOrder={false} />
           {children}
         </body>
       </html>

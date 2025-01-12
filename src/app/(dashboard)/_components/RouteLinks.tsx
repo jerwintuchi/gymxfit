@@ -8,7 +8,7 @@ export default function RouteLinks() {
                 <p className="text-gray-400">View and manage all registered users.</p>
                 <a
                     href="/users"
-                    className="inline-block mt-4 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+                    className="inline-block mt-4 px-4 py-2 bg-teal-600 rounded hover:bg-teal-700"
                 >
                     Go to Users
                 </a>
@@ -19,7 +19,7 @@ export default function RouteLinks() {
                 <p className="text-gray-400">View and filter user attendance logs.</p>
                 <a
                     href="/attendance"
-                    className="inline-block mt-4 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+                    className="inline-block mt-4 px-4 py-2 bg-teal-600 rounded hover:bg-teal-700"
                 >
                     Go to Attendance
                 </a>
@@ -30,7 +30,7 @@ export default function RouteLinks() {
                 <p className="text-gray-400">Manage and send user notifications.</p>
                 <a
                     href="/notifications"
-                    className="inline-block mt-4 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+                    className="inline-block mt-4 px-4 py-2 bg-teal-600 rounded hover:bg-teal-700"
                 >
                     Go to Notifications
                 </a>

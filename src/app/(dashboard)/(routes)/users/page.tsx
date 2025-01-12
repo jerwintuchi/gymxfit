@@ -1,7 +1,9 @@
+import UserClientWrapper from "./_components/UserClientWrapper";
+
 const UsersPage = () => {
     return (
-        <div className="text-black">
-            People pagesf safs dfad af asdfasd ad sadf sad asda da fsdaf sad
+        <div className="min-h-screen w-full bg-black ">
+            <UserClientWrapper />
         </div>
     );
 }

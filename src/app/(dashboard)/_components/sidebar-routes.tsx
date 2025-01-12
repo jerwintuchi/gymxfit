@@ -1,9 +1,15 @@
 "use client";
 
-import { Layout, Users } from "lucide-react";
+import { Calendar, Layout, LucideIcon, Users } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
 
-const guestRoutes = [
+type RouteLinks = {
+    icon: LucideIcon,
+    label: string,
+    href: `/${string}` // href must start with "/"
+}
+
+const guestRoutes: RouteLinks[] = [
     {
         icon: Layout,
         label: "Dashboard",
@@ -13,12 +19,17 @@ const guestRoutes = [
         icon: Users,
         label: "Users",
         href: "/users"
+    },
+    {
+        icon: Calendar,
+        label: "Attendances",
+        href: "/attendances"
     }
 ]
 export const SidebarRoutes = () => {
     const routes = guestRoutes;
     return (
-        <div className="flex flex-col w-full group">
+        <div className="flex flex-col w-full group-hover:text-white">
             {
                 routes.map((route) => (
                     <SidebarItem

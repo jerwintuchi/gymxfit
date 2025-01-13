@@ -10,7 +10,7 @@ const devUrl = process.env.NEXT_PUBLIC_BASE_URL_DEV;
 
 const QRModalButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [validUntil, setValidUntil] = useState("");
+  const [validUntil, setValidUntil] = useState(format(new Date(), "yyyy-MM-dd'T'HH:mm"));
   const [isLoading, setIsLoading] = useState(false);
   const { getToken } = useAuth();
 

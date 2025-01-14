@@ -7,4 +7,5 @@ declare global {
   interface CustomJwtSessionClaims {
       role?: Role;
   }
+
 }

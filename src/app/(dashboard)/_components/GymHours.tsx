@@ -1,24 +1,94 @@
 "use client";
-import { Button } from '@/components/ui/button';
-import { PenIcon } from 'lucide-react';
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from "react";
+import DisplayTime from "./DisplayTime";
+import EditTime from "./EditTime";
+import axios from "axios";
+import { devUrl } from "@/utils/global-variables";
+import { showPromiseToast } from "@/utils/toasts/showPromiseToast";
+import showErrorToast from "@/utils/toasts/showErrorToast";
+
+
 
 export default function GymHours() {
-    const [openingTime, setOpeningTime] = useState('');
-    const [closingTime, setClosingTime] = useState('');
+    //states for the original times
+    const [originalOpeningTime, setOriginalOpeningTime] = useState("");
+    const [originalClosingTime, setOriginalClosingTime] = useState("");
+
+    //states for the updated times
+    const [openingTime, setOpeningTime] = useState("");
+    const [closingTime, setClosingTime] = useState("");
+
     const [isEditing, setIsEditing] = useState(false); // Track editing state
 
-    const handleTimeChange = (type: 'opening' | 'closing', value: string) => {
-        if (type === 'opening') {
+    let successMessage = "";
+    //dynamic successMessage if openingTime is changed or closingTime is changed
+    if (openingTime !== originalOpeningTime && closingTime !== originalClosingTime) {
+        successMessage = `Updated opening time from ${originalOpeningTime} to ${openingTime} and closing time from ${originalClosingTime} to ${closingTime}`;
+    } else if (closingTime !== originalClosingTime) {
+        successMessage = `Updated closing time from ${originalClosingTime} to ${closingTime}`;
+    } else if (openingTime !== originalOpeningTime) {
+        successMessage = `Updated opening time from ${originalOpeningTime} to ${openingTime}`;
+    }
+
+    useEffect(() => {
+        // Fetch gym hours from the backend 
+        // Update the state with the fetched data
+        const fetchGymHours = async () => {
+            try {
+                const gymHours = await axios.get(`${devUrl}/settings/get/gym-hours`);
+                if (!gymHours) {
+                    console.log("No gym hours found");
+                    return;
+                }
+                const { openingTime, closingTime } = gymHours.data.value;
+                console.log("Fetched gym hours:", gymHours.data.value);
+
+
+                // Set both original and editable states
+                setOriginalOpeningTime(openingTime);
+                setOriginalClosingTime(closingTime);
+                setOpeningTime(openingTime);
+                setClosingTime(closingTime);
+            } catch (error) {
+                console.error("Error fetching gym hours:", error);
+            }
+        }
+        if (!isEditing) {
+            fetchGymHours();
+        }
+    }, [isEditing]);
+
+    const handleTimeChange = (type: "opening" | "closing", value: string) => {
+        if (type === "opening") {
             setOpeningTime(value);
         } else {
             setClosingTime(value);
         }
     };
 
-    const handleSave = () => {
+    const handleSave = (openingTime: string, closingTime: string) => {
         // Implement logic to save the updated times to your backend (e.g., API call)
-        console.log('Saving gym hours:', openingTime, closingTime);
+        const gymHours = { openingTime, closingTime };
+        try {
+            const response = axios.post(`${devUrl}/settings/update/gym-hours`, { gymHours });
+            if (!response) {
+                showErrorToast({ message: "Failed to save gym hours" });
+                console.log("Failed to save gym hours");
+                return;
+            }
+            console.log("gyHours: ", gymHours);
+            console.log("Response:", response);
+            showPromiseToast(response, { loading: "Saving gym hours...", success: successMessage, error: "Failed to save gym hours." });
+
+            // Update original times after successful save
+            setOriginalOpeningTime(openingTime);
+            setOriginalClosingTime(closingTime);
+
+        } catch (error) {
+            showErrorToast({ message: "Error saving gym hours" });
+            console.error("Error saving gym hours:", error);
+        }
         setIsEditing(false); // Switch back to display mode
     };
 
@@ -27,57 +97,19 @@ export default function GymHours() {
     };
 
     return (
-        <div className="gym-hours flex flex-col text-white p-4 rounded-lg bg-gray-900">
+        <div className="flex flex-col text-white p-4 bg-gray-900 rounded-lg">
             {isEditing ? ( // Conditionally render edit mode
-                <>
-                    <div className="mb-4 flex items-center">
-                        <label htmlFor="opening-time" className="text-lg font-medium mr-2">
-                            Opening Time
-                        </label>
-                        <i className="fas fa-clock text-gray-500 hover:text-blue-500 cursor-pointer mr-2" onClick={() => { /* Simulate time picker click */ }}></i>
-                        <input
-                            id="opening-time"
-                            type="time"
-                            value={openingTime}
-                            onChange={(e) => handleTimeChange('opening', e.target.value)}
-                            className="p-2 rounded bg-gray-700 text-white w-max-auto"
-                        />
-                    </div>
-
-                    <div className="mb-4 flex items-center">
-                        <label htmlFor="closing-time" className="text-lg font-medium mr-2">
-                            Closing Time
-                        </label>
-                        <i className="fas fa-clock text-gray-500 hover:text-blue-500 cursor-pointer mr-2" onClick={() => { /* Simulate time picker click */ }}></i>
-                        <input
-                            id="closing-time"
-                            type="time"
-                            value={closingTime}
-                            onChange={(e) => handleTimeChange('closing', e.target.value)}
-                            className="p-2 rounded bg-gray-700 text-white w-max-auto"
-                        />
-                    </div>
-
-                    <div className="flex flex-row justify-start">
-                        <button className="bg-gray-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded mr-2" onClick={() => setIsEditing(false)}>
-                            Cancel
-                        </button>
-                        <button className="bg-teal-600 hover:bg-teal-500 text-white font-bold py-1 px-4 rounded" onClick={handleSave}>
-                            Save
-                        </button>
-                    </div>
-                </>
-            ) : ( // Display mode
-                <div className="gym-hours-container flex flex-row">
-                    <p className="text-xl pr-2 flex-nowrap">
-                        {openingTime && closingTime
-                            ? `Open from ${openingTime} to ${closingTime}`
-                            : 'Please set the gym hours.'}
-                    </p>
-                    <Button className="bg-teal-500 hover:bg-green-400 text-white font-bold rounded-full w-4 h-8" onClick={handleEdit}>
-                        <PenIcon size={10} />
-                    </Button>
-                </div>
+                <EditTime
+                    openingTime={openingTime}
+                    closingTime={closingTime}
+                    originalOpeningTime={originalOpeningTime}
+                    originalClosingTime={originalClosingTime}
+                    handleTimeChange={handleTimeChange}
+                    handleSave={() => handleSave(openingTime, closingTime)}
+                    setIsEditing={setIsEditing} />
+            ) : (
+                // Display mode
+                <DisplayTime openingTime={openingTime} closingTime={closingTime} handleEdit={handleEdit} />
             )}
         </div>
     );

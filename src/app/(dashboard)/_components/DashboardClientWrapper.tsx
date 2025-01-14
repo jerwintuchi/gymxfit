@@ -4,13 +4,15 @@ import Attendance from './Attendance'
 import Membership from './Membership'
 import RouteLinks from './RouteLinks'
 import GoalStats from './GoalStats'
+import GymHours from './GymHours'
 
 export default function DashboardClientWrapper() {
     return (
         <>
             {/* Header */}
             <header className="py-4 px-6 bg-gray-900 border-b border-gray-800 font-extralight">
-                <h1 className="text-3xl text-white font-bold text-center">Admin Dashboard</h1>
+                <h1 className="text-3xl text-white font-bold text-center">Gymxfit Admin</h1>
+                <GymHours />
             </header>
 
             {/* Main Grid */}

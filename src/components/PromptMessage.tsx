@@ -8,10 +8,6 @@ interface PromptMessageProps {
 
 type messageType = "success" | "error" | "info";
 
-/* interface PromptMessageProps {
-    conditions: Condition[]; // Array of conditions with messages
-    className?: string; // Default styling for the message
-} */
 
 const PromptMessage: React.FC<PromptMessageProps> = ({ type, message, customStyle }: PromptMessageProps) => {
     const defaultStyles: Record<messageType, string> = {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DisplayTime from "./DisplayTime";
 import EditTime from "./EditTime";
 import axios from "axios";
@@ -31,34 +31,25 @@ export default function GymHours() {
         successMessage = `Updated opening time from ${originalOpeningTime} to ${openingTime}`;
     }
 
+    const fetchGymHours = useCallback(async () => {
+        try {
+            const { data } = await axios.get(`${devUrl}/settings/get/gym-hours`);
+            if (!data?.value) throw new Error("No gym hours found");
+
+            const { openingTime, closingTime } = data.value;
+            setOpeningTime(openingTime);
+            setClosingTime(closingTime);
+            setOriginalOpeningTime(openingTime);
+            setOriginalClosingTime(closingTime);
+        } catch (error) {
+            console.error("Error fetching gym hours:", error);
+            showErrorToast({ message: "Failed to fetch gym hours." });
+        }
+    }, []);
+
     useEffect(() => {
-        // Fetch gym hours from the backend 
-        // Update the state with the fetched data
-        const fetchGymHours = async () => {
-            try {
-                const gymHours = await axios.get(`${devUrl}/settings/get/gym-hours`);
-                if (!gymHours) {
-                    console.log("No gym hours found");
-                    return;
-                }
-                const { openingTime, closingTime } = gymHours.data.value;
-                console.log("Fetched gym hours:", gymHours.data.value);
-
-
-                // Set both original and editable states
-                setOriginalOpeningTime(openingTime);
-                setOriginalClosingTime(closingTime);
-                setOpeningTime(openingTime);
-                setClosingTime(closingTime);
-                
-            } catch (error) {
-                console.error("Error fetching gym hours:", error);
-            }
-        }
-        if (!isEditing) {
-            fetchGymHours();
-        }
-    }, [isEditing]);
+        if (!isEditing) fetchGymHours();
+    }, [isEditing, fetchGymHours]);
 
     const handleTimeChange = (type: "opening" | "closing", value: string) => {
         if (type === "opening") {

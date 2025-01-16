@@ -50,6 +50,7 @@ export default function GymHours() {
                 setOriginalClosingTime(closingTime);
                 setOpeningTime(openingTime);
                 setClosingTime(closingTime);
+                
             } catch (error) {
                 console.error("Error fetching gym hours:", error);
             }

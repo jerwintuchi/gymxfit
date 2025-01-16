@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import formatTime from '@/utils/formatTime';
+import { formatTime } from '@/utils/timeHelpers';
+
 import { Pencil } from 'lucide-react';
 import React from 'react';
 

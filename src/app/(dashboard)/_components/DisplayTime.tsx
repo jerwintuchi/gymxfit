@@ -17,7 +17,7 @@ export default function DisplayTime({ openingTime, closingTime, handleEdit }: Di
 
     return (
         <div className="gym-hours-container flex flex-row justify-center">
-            <p className="sm:text-2xl md:text-4xl lg:text-6xl pb-4 pr-2 lg:pr-2 ">
+            <p className="font-bold text-4xl md:text-4xl lg:text-6xl pb-4 pr-2 lg:pr-2 ">
                 {openingTime && closingTime
                     ? `Open from ${formattedOpeningTime} to ${formattedClosingTime}`
                     : "Please set the gym hours."}

@@ -37,7 +37,7 @@ export default function EditTime({
 
     return (
         <div className="flex flex-col items-center">
-            <div className="flex flex-row">
+            <div className="flex flex-row font-bold">
                 <div className="mb-4 mr-4">
                     <label htmlFor="opening-time" className="block text-lg font-medium mb-2">
                         Opening Time

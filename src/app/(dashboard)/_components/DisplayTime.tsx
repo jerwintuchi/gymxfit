@@ -9,7 +9,7 @@ interface DisplayTimeProps {
     closingTime: string;
     handleEdit: () => void;
 }
-
+    
 export default function DisplayTime({ openingTime, closingTime, handleEdit }: DisplayTimeProps) {
     // Safely format times
     const formattedOpeningTime = openingTime ? formatTime(openingTime) : 'Not set';

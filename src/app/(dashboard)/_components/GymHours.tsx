@@ -7,6 +7,7 @@ import axios from "axios";
 import { devUrl } from "@/utils/global-variables";
 import { showPromiseToast } from "@/utils/toasts/showPromiseToast";
 import showErrorToast from "@/utils/toasts/showErrorToast";
+import { useAuth } from "@clerk/nextjs";
 
 
 
@@ -30,8 +31,12 @@ export default function GymHours() {
     } else if (openingTime !== originalOpeningTime) {
         successMessage = `Updated opening time from ${originalOpeningTime} to ${openingTime}`;
     }
+    //get the token
+    const { getToken } = useAuth();
+
 
     const fetchGymHours = useCallback(async () => {
+
         try {
             const { data } = await axios.get(`${devUrl}/settings/get/gym-hours`);
             if (!data?.value) throw new Error("No gym hours found");
@@ -60,11 +65,17 @@ export default function GymHours() {
         }
     };
 
-    const handleSave = (openingTime: string, closingTime: string) => {
+    const handleSave = async (openingTime: string, closingTime: string) => {
         // Implement logic to save the updated times to your backend (e.g., API call)
         const gymHours = { openingTime, closingTime };
+        const token = await getToken();
         try {
-            const response = axios.post(`${devUrl}/settings/update/gym-hours`, { gymHours });
+            const response = axios.post(`${devUrl}/settings/update/gym-hours`, { gymHours }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
             if (!response) {
                 showErrorToast({ message: "Failed to save gym hours" });
                 console.log("Failed to save gym hours");

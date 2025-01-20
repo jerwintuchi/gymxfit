@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog, DialogContent, DialogClose, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogClose, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import showErrorToast from "@/utils/toasts/showErrorToast";
 import { showPromiseToast } from "@/utils/toasts/showPromiseToast";
 import { useAuth } from "@clerk/nextjs";
@@ -62,13 +62,20 @@ const QRModalButton = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-center">Regenerate QR Code</DialogTitle>
-            <DialogDescription className="text-gray-500 text-center">
+            <DialogDescription className="text-gray-600 text-center">
               Are you sure you want to regenerate the QR code? The current code will be invalidated.
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex justify-center gap-2">
-            <div className="flex flex-col-reverse gap-2">
+            <div className="flex flex-col gap-2">
+              <button
+                disabled={isLoading}
+                onClick={onGenerate}
+                className="bg-teal-600 hover:bg-teal-700 text-white self-end rounded-full px-4 py-1"
+              >
+                {isLoading ? "Regenerating..." : "Regenerate"}
+              </button>
               <DialogClose asChild>
                 <button
                   disabled={isLoading}
@@ -77,14 +84,12 @@ const QRModalButton = () => {
                   Cancel
                 </button>
               </DialogClose>
-              <button
-                disabled={isLoading}
-                onClick={onGenerate}
-                className="bg-teal-600 hover:bg-teal-700 text-white self-end rounded-full px-4  py-1"
-              >
-                {isLoading ? "Regenerating..." : "Regenerate"}
-              </button>
             </div>
+          </div>
+          <div className="flex justify-center">
+            <DialogFooter className="text-gray-400 text-xs">
+              Do this only if there is no qr code or the current qr code is not working.
+            </DialogFooter>
           </div>
         </DialogContent>
       </Dialog>

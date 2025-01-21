@@ -26,7 +26,7 @@ export default function EditTime({
     const validTime = openingTime < closingTime; // Validation: Opening time must be less than closing time
     const renderMessage = () => {
         if (!validTime) {
-            return <PromptMessage type="error" message="Opening time must be less than closing time." />;
+            return <PromptMessage type="error" message="Opening time must be earlier than closing time." />;
         }
         if (isSaveDisabled) {
             return <PromptMessage type="info" message="No changes made yet, change time to save." />;

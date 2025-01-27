@@ -1,6 +1,6 @@
-import React from 'react'
 import QRCode from './_components/QRCode'
 import QRModalButton from './_components/QRModalButton'
+
 
 export default function Attendances() {
     return (
@@ -11,7 +11,7 @@ export default function Attendances() {
                     <QRCode />
                 </div> {/* Conditional component to render the generated QR code */}
                 <div className='pt-4'>
-                        <QRModalButton />
+                    <QRModalButton />
                 </div>
             </div>
         </div>

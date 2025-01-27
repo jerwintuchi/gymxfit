@@ -47,7 +47,7 @@ export default function QRCode() {
                 <QRCodeSVG
                     value={"https://www.google.com"}
                     title="Scan to Validate"
-                    size={128}
+                    size={256}
                     bgColor="#ffffff"
                     fgColor="#000000"
                     level="H"
